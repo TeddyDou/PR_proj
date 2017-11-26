@@ -6,7 +6,8 @@ Created on Nov 25, 2017
 
 import pandas as pd
 import numpy as np
-import random 
+import random
+from sklearn import preprocessing
 
 class Preprocess():
     
@@ -88,19 +89,24 @@ class Preprocess():
         for array in matrix_reduced_nondefault:
             self.matrix_standard[m, 0:8] = array
             m += 1
-        print(self.matrix_standard)
-                
-                
+        data_x = preprocessing.scale(self.matrix_standard[:, :-1])
+        data_y = self.matrix_standard[:, 7]
+        return data_x, data_y
+
+
+    def load_dataset(self):
+        self.set_limit()
+        self.set_sex()
+        self.set_education()
+        self.set_marriage()
+        self.set_age()
+        self.set_missed_payments()
+        self.set_amt_owed()
+        self.set_default()
+        return self.data_reducation()
 
 if __name__ == '__main__':
     a = Preprocess("default of credit card clients.xls")
-    a.set_limit()
-    a.set_sex()
-    a.set_education()
-    a.set_marriage()
-    a.set_age()
-    a.set_missed_payments()
-    a.set_amt_owed()
-    a.set_default()
-    a.data_reducation()
+    a.load_dataset()
+
     
