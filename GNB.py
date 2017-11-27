@@ -1,13 +1,48 @@
 from sklearn import datasets
 from Preprocessing import Preprocess
 import numpy as np
+from sklearn import preprocessing
 
 # load iris dataset for testing
 from sklearn.model_selection import train_test_split
 
 creditdata = Preprocess("default of credit card clients.xls")
-data_X, data_Y = creditdata.load_dataset()
-X_train, X_test, Y_train, Y_test = train_test_split(data_X, data_Y, test_size=0.2)
+# data_X, data_Y = creditdata.load_dataset()
+X_train, X_test, Y_train, Y_test = creditdata.load_dataset()
+
+
+# X_train, X_test, Y_train, Y_test = train_test_split(data_X, data_Y, test_size=0.2)
+#1.StandardScaler
+# scaler =  preprocessing.StandardScaler().fit(X_train)
+# X_train = scaler.transform(X_train) 
+# X_test = scaler.transform(X_test)  
+
+#2.MinMaxScaler
+# scaler = preprocessing.MinMaxScaler()
+# X_train = scaler.fit_transform(X_train)
+# X_test = scaler.transform(X_test)
+
+#3.MaxAbsScaler
+# scaler = preprocessing.MaxAbsScaler()
+# X_train = scaler.fit_transform(X_train)
+# X_test = scaler.transform(X_test)
+
+#4.Normalization low
+# normalizer = preprocessing.Normalizer().fit(X_train)
+# X_train = normalizer.transform(X_train)     
+# X_test = normalizer.transform(X_test)   
+
+#5.Binarization
+# binarizer = preprocessing.Binarizer().fit(X_train)
+# X_train = binarizer.transform(X_train)     
+# X_test = binarizer.transform(X_test)   
+
+#6. Non-linear transformation¶
+# quantile_transformer = preprocessing.QuantileTransformer( output_distribution='normal', random_state=0)
+# X_train = quantile_transformer.fit_transform(X_train)
+# X_test = quantile_transformer.transform(X_test)
+# print(X_train)
+
 
 # Gaussian Naive Bayes Classifier
 from sklearn.naive_bayes import GaussianNB

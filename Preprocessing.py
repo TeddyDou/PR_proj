@@ -8,13 +8,14 @@ import pandas as pd
 import numpy as np
 import random
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
 
 class Preprocess():
     
     def __init__(self, data_path):
         self.data = pd.read_excel(data_path).as_matrix()
-        self.matrix = np.empty([30000,8], dtype=int) 
-        self.matrix_standard = np.empty([13272, 8], dtype=int)
+        self.matrix = np.empty([30000,8], dtype=float) 
+        self.matrix_standard = np.empty([13272, 8], dtype=float)
 #         print(self.matrix)
     
     def set_limit(self):
@@ -89,9 +90,70 @@ class Preprocess():
         for array in matrix_reduced_nondefault:
             self.matrix_standard[m, 0:8] = array
             m += 1
-        data_x = preprocessing.scale(self.matrix_standard[:, :-1])
+        data_x = self.matrix_standard[:, :-1]
         data_y = self.matrix_standard[:, 7]
+#         print(self.matrix_standard)
+#         print(data_x)
+#         print(data_y)
         return data_x, data_y
+    
+    def data_reducation_alt(self):
+        matrix_defualt = np.empty([6636, 8], dtype=float)
+        matrix_nondefualt = np.empty([23364, 8], dtype=float)
+        #non default index
+        i = 0
+        #default index
+        j = 0
+        
+        for row in range(0,30000):
+            if self.matrix.item(row,7) == 0:
+                matrix_nondefualt[i,0:8] = self.matrix[row, 0:8]
+                i += 1
+            else:
+                matrix_defualt[j,0:8] = self.matrix[row, 0:8]
+                j += 1
+        
+        #reduce data into 13272 records with 6636 default and 6636 non-default 
+        self.matrix_standard[0:6636, 0:8] = matrix_defualt 
+        matrix_reduced_nondefault = random.sample(list(matrix_nondefualt), 6636)
+        X_nondefault = np.empty([6636, 8], dtype=float)
+        m = 0
+        for array in matrix_reduced_nondefault:
+            X_nondefault[m, 0:8] = array
+            m += 1   
+        X_nondefault_datax = X_nondefault[:, :-1]
+        X_nondefault_datay = X_nondefault[:, 7]
+        X_default_datax = matrix_defualt[:, :-1]
+        X_default_datay = matrix_defualt[:, 7]
+        
+        X_nondefault_train, X_nondefault_test, Y_nondefault_train, Y_nondefault_test = train_test_split(X_nondefault_datax, X_nondefault_datay, test_size=0.2)
+        X_default_train, X_default_test, Y_default_train, Y_default_test = train_test_split(X_default_datax, X_default_datay, test_size=0.2)
+        
+      
+        #traning data
+        data_x_train = np.concatenate((X_nondefault_train, X_default_train), axis=0)
+        print(X_nondefault_train)
+        print (X_default_train)
+        print(data_x_train)
+        
+        data_y_train = np.concatenate((Y_nondefault_train, Y_default_train), axis=0)
+        print(Y_nondefault_train)
+        print (Y_default_train)
+        print(data_y_train)
+        
+        #testing data
+        data_x_test= np.concatenate((X_nondefault_test, X_default_test), axis=0)
+        print(X_nondefault_test)
+        print (X_default_test)
+        print(data_x_test)
+        
+        data_y_test = np.concatenate((Y_nondefault_test, Y_default_test), axis=0)
+        print(Y_nondefault_test)
+        print (Y_default_test)
+        print(data_y_test)
+        
+        return data_x_train, data_x_test, data_y_train, data_y_test
+    
 
 
     def load_dataset(self):
@@ -103,7 +165,7 @@ class Preprocess():
         self.set_missed_payments()
         self.set_amt_owed()
         self.set_default()
-        return self.data_reducation()
+        return self.data_reducation_alt()
 
 if __name__ == '__main__':
     a = Preprocess("default of credit card clients.xls")
