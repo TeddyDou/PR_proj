@@ -79,7 +79,7 @@ class experiment:
         self.printresult()
 
     def printresult(self):
-        print("%28s%28s" % ("___________________________|", "No preprocess"), end='')
+        print("%28s%28s" %("___________________________", "No preprocess"), end='')
         for p in self.processor:
             print("%28s" %p.descr, end='')
         print('')
