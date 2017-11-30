@@ -112,9 +112,9 @@ class PreprocessAlt():
 #         print(data_y_test.shape)
 #         
         self.matrix_x_train = data_x_train
-        print(self.matrix_x_train)
+#        print(self.matrix_x_train)
         self.matrix_x_test = data_x_test
-        print(self.matrix_x_test)
+#        print(self.matrix_x_test)
         self.matrix_y_train = data_y_train
 #         print(self.matrix_y_train.shape)
         self.matrix_y_test = data_y_test
@@ -169,8 +169,8 @@ class PreprocessAlt():
 #         print(self.x_test[2]) 
         
         
-        print(self.x_train)
-        print(self.x_test)
+#        print(self.x_train)
+#        print(self.x_test)
   
         
         return self.x_train, self.x_test, self.matrix_y_train, self.matrix_y_test

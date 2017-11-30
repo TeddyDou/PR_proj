@@ -13,13 +13,13 @@ class Postprocess():
         self.x_test = x2
         self.y_train = y1
         self.y_test = y2
-        print("#######")
-        print(x1)
-        print(x1.shape)
-        print("*******")
-        print(x2)
-        print(x2.shape)
-        print("*******")
+        # print("#######")
+        # print(x1)
+        # print(x1.shape)
+        # print("*******")
+        # print(x2)
+        # print(x2.shape)
+        # print("*******")
     
     def set_age(self):
         #group age into different intervals
@@ -42,6 +42,7 @@ class Postprocess():
                 self.x_train[row, 4] = 8
             else:
                 self.x_train[row, 4] = 9
+            print("aged row: %d" % row)
                 
         for row in range(0, 2656):
             if self.x_test[row, 4] in range(1,10):
@@ -95,6 +96,8 @@ class Postprocess():
             else:
                 self.x_train[row, 6] = 3
 
+            print("amount row: %d" % row)
+
     
 
         #process testing data
@@ -126,19 +129,35 @@ class Postprocess():
             else:
                 self.x_test[row, 6] = 3        
         
-        print(self.x_train)
-        print("*******")
-        print(self.x_test)
+        # print(self.x_train)
+        # print("*******")
+        # print(self.x_test)
                 
     def improve_data(self):
-        b.set_age()
-        b.set_amount()
-        return self.x_train , self.x_test, self.y_train, self.y_test 
+        self.set_age()
+        self.set_amount()
+        return self.x_train, self.x_test, self.y_train, self.y_test
         
 if __name__ == '__main__':
+    import pickle
     a = PreprocessAlt("default of credit card clients.xls")
-    a.load()
+    rx1, rx2, ry1, ry2 = a.load()
     x1, x2, y1, y2 = a.dimension_decrease()
     b = Postprocess(x1,x2,y1,y2)
-    b.improve_data()
-    
+    xd1, xd2, yd1, yd2= b.improve_data()
+    with open("express_x", "w") as f:
+        pickle.dump(rx1, f)
+        pickle.dump(rx2, f)
+        pickle.dump(x1, f)
+        pickle.dump(x2, f)
+        pickle.dump(xd1, f)
+        pickle.dump(xd2, f)
+        f.close()
+    with open("express_y", "w") as fp:
+        pickle.dump(ry1, fp)
+        pickle.dump(ry2, fp)
+        pickle.dump(y1, fp)
+        pickle.dump(y2, fp)
+        pickle.dump(yd1, fp)
+        pickle.dump(yd2,fp)
+        f.close()
