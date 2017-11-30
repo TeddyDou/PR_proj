@@ -1,8 +1,8 @@
-'''
+"""
 Created on Nov 25, 2017
 
 @author: Zac
-'''
+"""
 
 import pandas as pd
 import numpy as np
@@ -132,25 +132,13 @@ class Preprocess():
       
         #traning data
         data_x_train = np.concatenate((X_nondefault_train, X_default_train), axis=0)
-        print(X_nondefault_train)
-        print (X_default_train)
-        print(data_x_train)
         
         data_y_train = np.concatenate((Y_nondefault_train, Y_default_train), axis=0)
-        print(Y_nondefault_train)
-        print (Y_default_train)
-        print(data_y_train)
         
         #testing data
         data_x_test= np.concatenate((X_nondefault_test, X_default_test), axis=0)
-        print(X_nondefault_test)
-        print (X_default_test)
-        print(data_x_test)
         
         data_y_test = np.concatenate((Y_nondefault_test, Y_default_test), axis=0)
-        print(Y_nondefault_test)
-        print (Y_default_test)
-        print(data_y_test)
         
         return data_x_train, data_x_test, data_y_train, data_y_test
     
@@ -170,5 +158,3 @@ class Preprocess():
 if __name__ == '__main__':
     a = Preprocess("default of credit card clients.xls")
     a.load_dataset()
-
-    
