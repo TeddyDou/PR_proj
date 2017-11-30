@@ -21,27 +21,28 @@ class experiment:
         self.processor =[]
         self.result = []
         creditdata = Preprocess("default of credit card clients.xls")
-        self.X_train, self.X_test, self.Y_train, self.Y_test = creditdata.load_dataset()
+        # self.X_train, self.X_test, self.Y_train, self.Y_test = creditdata.load_dataset()
         self.buildclf()
         self.buildprocessor()
+        self.logfile = open("execution_Log", "a")
 
         # # code for testing quick access dataset
-        # import pickle
-        # with open('express_x', 'rb') as fp:
-        #     self.X_train = pickle.load(fp)
-        #     self.X_test = pickle.load(fp)
-        #     fp.close()
-        # with open('express_y', 'rb') as fp:
-        #     self.Y_train = pickle.load(fp)
-        #     self.Y_test = pickle.load(fp)
-        #     fp.close()
+        import pickle
+        with open('express_x', 'rb') as fp:
+            self.X_train = pickle.load(fp)
+            self.X_test = pickle.load(fp)
+            fp.close()
+        with open('express_y', 'rb') as fp:
+            self.Y_train = pickle.load(fp)
+            self.Y_test = pickle.load(fp)
+            fp.close()
 
     def buildclf(self):
         self.classifier.append(processor(GaussianNB(), "Gaussian NB"))
         self.classifier.append(processor(KNeighborsClassifier(n_neighbors=15), "K Nearest Neighbors"))
         self.classifier.append(processor(SVC(), "C-Support Vector"))
         self.classifier.append(processor(LogisticRegression(), "Logistic Regression"))
-        self.classifier.append(processor(LinearDiscriminantAnalysis(), "Linear Discriminant Analysis"))
+        self.classifier.append(processor(LinearDiscriminantAnalysis(), "Discriminant Analysis"))
         self.classifier.append(processor(MLPClassifier(), "Artificial neural networks"))
         self.classifier.append(processor(DecisionTreeClassifier(), "Decision Tree"))
 
@@ -54,29 +55,40 @@ class experiment:
         self.processor.append(processor(QuantileTransformer(), "Non-linear transformation"))
 
     def getprecision(self, clf, x1, x2, y1, y2):
+
         clf.obj.fit(x1, y1)
         y_pred = clf.obj.predict(x2)
         mislabeled = (y2 != y_pred).sum()
         totaltest = x2.shape[0]
         print("Mislabeled points (%s Classification) out of a total %d points : %d" % (clf.descr, totaltest,
-                                                                                       mislabeled))
+                                                                                   mislabeled))
         Precision = 1 - mislabeled / totaltest
         print("Precision of %s is %4.2f%%" % (clf.descr, Precision * 100))
         return Precision
 
     def run(self):
 
+        maxprec = [0, "", ""]
         for clf in self.classifier:
             row = []
             prec = self.getprecision(clf, self.X_train, self.X_test, self.Y_train, self.Y_test)
+            if prec > maxprec[0]:
+                maxprec = [prec, "no preprocess", clf.descr]
             row.append(prec)
             for processor in self.processor:
                 processed_X_train = processor.obj.fit_transform(self.X_train)
                 processed_X_test = processor.obj.fit_transform(self.X_test)
                 prec = self.getprecision(clf, processed_X_train, processed_X_test, self.Y_train, self.Y_test)
+                if prec > maxprec[0]:
+                    maxprec = [prec, processor.descr, clf.descr]
                 row.append(prec)
             self.result.append(row)
         self.printresult()
+        print("The maximum precision is %0.8f%%, with %s and %s classification" %(maxprec[0]*100, maxprec[1],
+                                                                                 maxprec[2]))
+        self.logfile.write("%0.8f%%, %s and %s classification" %(maxprec[0]*100, maxprec[1], maxprec[2]))
+        self.logfile.write("\n")
+
 
     def printresult(self):
         print("%28s%28s" % ("___________________________|", "No preprocess"), end='')
@@ -88,6 +100,9 @@ class experiment:
             for j in range(len(self.processor)+1):
                 print("%22s%4.2f%%" % ("", self.result[i][j]*100), end='')
             print('')
+
+    # def comparison(self):
+    #     c =
 
 
 class processor:

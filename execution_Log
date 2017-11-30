@@ -1,0 +1,24 @@
+70.89608434%, Non-linear transformation and Logistic Regression classification
+68.82530120%, Non-linear transformation and C-Support Vector classification
+71.68674699%, Non-linear transformation and Logistic Regression classification
+68.33584337%, Non-linear transformation and Artificial neural networks classification
+70.14307229%, Non-linear transformation and Logistic Regression classification
+70.29367470%, Non-linear transformation and C-Support Vector classification
+71.15963855%, Non-linear transformation and Discriminant Analysis classification
+69.35240964%, Non-linear transformation and C-Support Vector classification
+70.18072289%, Binarization and Gaussian NB classification
+70.67018072%, Binarization and Gaussian NB classification
+69.72891566%, MinMax Scaler and C-Support Vector classification
+70.03012048%, Binarization and Gaussian NB classification
+71.34789157%, Standard Scaler and C-Support Vector classification
+69.99246988%, MaxAbs Scaler and Artificial neural networks classification
+69.91716867%, Standard Scaler and Artificial neural networks classification
+69.27710843%, Standard Scaler and C-Support Vector classification
+69.99246988%, Non-linear transformation and Discriminant Analysis classification
+70.21837349%, Binarization and Gaussian NB classification
+69.91716867%, Standard Scaler and Artificial neural networks classification
+69.91716867%, Standard Scaler and Logistic Regression classification
+70.82078313%, MinMax Scaler and C-Support Vector classification
+70.03012048%, MinMax Scaler and C-Support Vector classification
+71.23493976%, Non-linear transformation and C-Support Vector classification
+71.12198795%, Standard Scaler and C-Support Vector classification
