@@ -1,4 +1,10 @@
-# print(__doc__)
+"""
+Created on Nov.29, 2017
+
+@author Ted
+"""
+
+
 import random
 import numpy as np
 import matplotlib.pyplot as plt
@@ -68,10 +74,13 @@ class ploting:
 
     def load_data(self, sample, x_axi_attr_index, y_axi_attr_index):
         from PreprocessingAlt import PreprocessAlt
+        from PostprocessingAlt import PostprocessAlt
         creditdata = PreprocessAlt("default of credit card clients.xls")
         raw_X_train, raw_X_test, raw_y_train, raw_y_test = creditdata.load()
         low_dim_X_train, low_dim_X_test, low_dim_Y_train, low_dim_Y_test = creditdata.dimension_decrease()
-        return self.data_simplification(self.prep.fit_transform(low_dim_X_train), low_dim_Y_train, sample,
+        postp = PostprocessAlt(low_dim_X_train, low_dim_X_test, low_dim_Y_train, low_dim_Y_test)
+        x1, x2, y1, y2 = postp.improve_data()
+        return self.data_simplification(x1, y1, sample,
                                         x_axi_attr_index, y_axi_attr_index)
 
     def plot(self, sample_points, x_axi_attr_index, y_axi_attr_index, title, xlabel, ylabel):
@@ -91,6 +100,10 @@ class ploting:
         ax.set_yticks(())
         ax.set_title(title)
 
+        # print(plot_x)
+        # print("----------")
+        # print(plot_y)
+
     def show(self):
         plt.show()
 
@@ -100,8 +113,8 @@ if __name__ == '__main__':
     p = QuantileTransformer()
     myplot = ploting(c, p)
 
-    # column 0: limited balance, 1: sex(gender) 2: education 3: marriage 4: age 5: amount owed 6: missed payment
-    myplot.plot(20, 0, 1, "SVM Classifier", "x axis: limited balance", "y axis: gender")
-    myplot.plot(20, 2, 5, "SVM Classifier", "x axis: education", "y axis: amount owed")
-    myplot.plot(20, 4, 6, "SVM Classifier", "x axis: age", "y axis: missed payment")
+    # column 0: limited balance, 1: sex(gender) 2: education 3: marriage 4: age 5: missed payment 6: amount owed
+    myplot.plot(100, 0, 1, "SVM Classifier", "x axis: limited balance", "y axis: gender")
+    myplot.plot(100, 2, 6, "SVM Classifier", "x axis: education", "y axis: amount owed")
+    myplot.plot(100, 4, 5, "SVM Classifier", "x axis: age", "y axis: missed payment")
     myplot.show()

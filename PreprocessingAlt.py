@@ -13,15 +13,15 @@ class PreprocessAlt():
     
     def __init__(self, data_path):
         self.data = pd.read_excel(data_path).as_matrix()
-        self.matrix_default = np.empty([6636, 24], dtype=int)
-        self.matrix_nondefault = np.empty([6636, 24], dtype=int)
-        self.matrix_x_train = np.empty([10616, 23], dtype=int)
-        self.matrix_y_train = np.empty([10616, ], dtype=int)
-        self.matrix_x_test = np.empty([2656, 23], dtype=int)
-        self.matrix_y_test = np.empty([2656, ], dtype=int)
-        self.x_train = np.empty([10616, 7], dtype=int)
+        self.matrix_default = np.empty([6636, 24], dtype=float)
+        self.matrix_nondefault = np.empty([6636, 24], dtype=float)
+        self.matrix_x_train = np.empty([10616, 23], dtype=float)
+        self.matrix_y_train = np.empty([10616, ], dtype=float)
+        self.matrix_x_test = np.empty([2656, 23], dtype=float)
+        self.matrix_y_test = np.empty([2656, ], dtype=float)
+        self.x_train = np.empty([10616, 7], dtype=float)
 #         self.y_train = np.empty([10616, ], dtype=int)
-        self.x_test = np.empty([2656, 7], dtype=int)
+        self.x_test = np.empty([2656, 7], dtype=float)
 #         self.y_test = np.empty([2656, ], dtype=int)
 #         data_x_train, data_x_test, data_y_train, data_y_test
 #         print(self.data)

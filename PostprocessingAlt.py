@@ -13,15 +13,6 @@ class PostprocessAlt():
         self.x_test = x2
         self.y_train = y1
         self.y_test = y2
-        print(len(self.x_train))
-        print(len(self.x_test))
-        # print("#######")
-        # print(x1)
-        # print(x1.shape)
-        # print("*******")
-        # print(x2)
-        # print(x2.shape)
-        # print("*******")
 
     def set_age(self):
         # group age into different intervals
@@ -99,8 +90,6 @@ class PostprocessAlt():
                 self.x_train[row, 6] = 2
             else:
                 self.x_train[row, 6] = 3
-
-            print("amount row: %d" % row)
 
         # process testing data
         for row in range(0, 2656):
