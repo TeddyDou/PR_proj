@@ -7,8 +7,8 @@ Created on Nov.29, 2017
 from tkinter import Tk, Label, Button, Frame, BOTTOM, LEFT, TOP, RIGHT, StringVar
 from tkinter.ttk import Combobox
 from sklearn.svm import SVC
-from PreprocessingAlt import PreprocessAlt
-from PostprocessingAlt import PostprocessAlt
+from Preprocessing import Preprocess
+from Postprocessing import Postprocess
 import numpy as np
 
 
@@ -19,10 +19,10 @@ class predictor:
         self.trainmodel()
 
     def trainmodel(self):
-        prep = PreprocessAlt("default of credit card clients.xls")
+        prep = Preprocess("default of credit card clients.xls")
         prep.load()
         low_dim_x1, low_dim_x2, low_dim_y1, low_dim_y2 = prep.dimension_decrease()
-        postp = PostprocessAlt(low_dim_x1, low_dim_x2, low_dim_y1, low_dim_y2)
+        postp = Postprocess(low_dim_x1, low_dim_x2, low_dim_y1, low_dim_y2)
         discretized_x1, discretized_x2, discretized_y1, discretized_y2 = postp.improve_data()
         x = np.concatenate((discretized_x1, discretized_x2))
         y = np.concatenate((discretized_y1, discretized_y2))

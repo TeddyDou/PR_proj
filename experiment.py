@@ -6,14 +6,14 @@ Created on Nov.25, 2017
 
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import LinearSVC, NuSVC, SVC
+from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler, Normalizer, Binarizer, QuantileTransformer
-from PreprocessingAlt import PreprocessAlt
-from PostprocessingAlt import PostprocessAlt
+from Preprocessing import Preprocess
+from Postprocessing import Postprocess
 
 
 class experiment:
@@ -21,12 +21,12 @@ class experiment:
         self.classifier = []
         self.processor =[]
         self.result = []
-        creditdata = PreprocessAlt("default of credit card clients.xls")
+        creditdata = Preprocess("default of credit card clients.xls")
         self.raw_X_train, self.raw_X_test, self.raw_Y_train, self.raw_Y_test = creditdata.load()
         self.low_dim_X_train, self.low_dim_X_test, self.low_dim_Y_train, self.low_dim_Y_test = \
             creditdata.dimension_decrease()
         x1, x2, y1, y2 = self.low_dim_X_train, self.low_dim_X_test, self.low_dim_Y_train, self.low_dim_Y_test
-        self.discretizer = PostprocessAlt(x1, x2, y1, y2)
+        self.discretizer = Postprocess(x1, x2, y1, y2)
         self.discretized_X_train, self.discretized_X_test, self.discretized_Y_train, self.discretized_Y_test = \
             self.discretizer.improve_data()
         self.buildclf()
@@ -38,7 +38,7 @@ class experiment:
         self.classifier.append(processor(KNeighborsClassifier(n_neighbors=15), "K Nearest Neighbors"))
         self.classifier.append(processor(SVC(), "C-Support Vector"))
         self.classifier.append(processor(LogisticRegression(), "Logistic Regression"))
-        # self.classifier.append(processor(LinearDiscriminantAnalysis(), "Discriminant Analysis"))
+        self.classifier.append(processor(LinearDiscriminantAnalysis(), "Discriminant Analysis"))
         self.classifier.append(processor(MLPClassifier(), "Artificial neural networks"))
         self.classifier.append(processor(DecisionTreeClassifier(), "Decision Tree"))
 

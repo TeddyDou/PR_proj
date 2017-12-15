@@ -17,7 +17,6 @@ class ploting:
         self.prep = preprocessor
         self.model = classifier
 
-
     def make_meshgrid(self, x, y, h=.02):
 
         """Create a mesh of points to plot in
@@ -73,12 +72,12 @@ class ploting:
         return simplified_x, simplified_y
 
     def load_data(self, sample, x_axi_attr_index, y_axi_attr_index):
-        from PreprocessingAlt import PreprocessAlt
-        from PostprocessingAlt import PostprocessAlt
-        creditdata = PreprocessAlt("default of credit card clients.xls")
+        from Preprocessing import Preprocess
+        from Postprocessing import Postprocess
+        creditdata = Preprocess("default of credit card clients.xls")
         raw_X_train, raw_X_test, raw_y_train, raw_y_test = creditdata.load()
         low_dim_X_train, low_dim_X_test, low_dim_Y_train, low_dim_Y_test = creditdata.dimension_decrease()
-        postp = PostprocessAlt(low_dim_X_train, low_dim_X_test, low_dim_Y_train, low_dim_Y_test)
+        postp = Postprocess(low_dim_X_train, low_dim_X_test, low_dim_Y_train, low_dim_Y_test)
         x1, x2, y1, y2 = postp.improve_data()
         return self.data_simplification(x1, y1, sample,
                                         x_axi_attr_index, y_axi_attr_index)
@@ -99,10 +98,6 @@ class ploting:
         ax.set_xticks(())
         ax.set_yticks(())
         ax.set_title(title)
-
-        # print(plot_x)
-        # print("----------")
-        # print(plot_y)
 
     def show(self):
         plt.show()
