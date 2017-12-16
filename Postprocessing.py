@@ -1,8 +1,11 @@
-'''
+"""
+Postprocess the data, read the preprocessed data and apply discretization on it. Set the attribute AGE into equal
+interval of ten, and placed both attributes AMT_OWED and LIMIT_BAL into level ranged as “Low” for 0-100,000, “Medium”
+for 100,000-500,000, and “High” for 500,000-more respectively.
 Created on Nov 29, 2017
 
 @author: Zac
-'''
+"""
 
 from Preprocessing import Preprocess
 
@@ -121,10 +124,6 @@ class Postprocess():
                 self.x_test[row, 6] = 2
             else:
                 self.x_test[row, 6] = 3
-
-                # print(self.x_train)
-                # print("*******")
-                # print(self.x_test)
 
     def improve_data(self):
         self.set_age()

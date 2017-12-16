@@ -1,4 +1,6 @@
 """
+This is the implementation of the prediction application in the project. Select the appropriate features and make
+prediction of default or non-default on credit card.
 Created on Nov.29, 2017
 
 @author Ted
@@ -13,11 +15,13 @@ import numpy as np
 
 
 class predictor:
+    """The class of predictor"""
 
     def __init__(self):
         self.c = SVC()
         self.trainmodel()
 
+    # train the model of making prediction, we load data with reduced dimensions and discretization as training set
     def trainmodel(self):
         prep = Preprocess("default of credit card clients.xls")
         prep.load()
@@ -37,6 +41,9 @@ class predictor:
 
 
 class MyPredictionGUI:
+    """The class of application GUI"""
+
+    # initial the grid and layout of the application
     def __init__(self, master):
         self.predictor = predictor()
 
@@ -91,6 +98,7 @@ class MyPredictionGUI:
         self.close_button = Button(self.botFrame, text="Close", command=master.quit)
         self.close_button.pack(side=RIGHT)
 
+    # handle the selected input
     def modify_input(self):
         result = []
         for i in range(0, 7):
@@ -100,6 +108,7 @@ class MyPredictionGUI:
                 result.append(self.input_component_text[i].index(self.input_value[i].get())+1)
         return result
 
+    # predict and show the result
     def predict(self):
         modified_input = np.asarray(self.modify_input()).reshape(1, -1)
         prediction = self.predictor.c.predict(modified_input)

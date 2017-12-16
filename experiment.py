@@ -1,4 +1,10 @@
 """
+This is the program of conducting the experiments designed in the project. It shows the comparisons between prediction
+precisions of different classification techniques using raw data and different standardization techniques. Each row
+displays one of the classification methods. And despite the column with classifier names, the first column represent
+the precision made by raw data with 25 attributes. The other columns shows each of the standardization and normalization
+techniques.
+
 Created on Nov.25, 2017
 
 @author Ted
@@ -17,6 +23,8 @@ from Postprocessing import Postprocess
 
 
 class experiment:
+
+    # initialization function, load dataset and adjust preprocessing and postprocessing
     def __init__(self):
         self.classifier = []
         self.processor =[]
@@ -33,6 +41,7 @@ class experiment:
         self.buildprocessor()
         self.logfile = open("execution_Log", "a")
 
+    # function to set up a list of classifiers with different algorithm
     def buildclf(self):
         self.classifier.append(processor(GaussianNB(), "Gaussian NB"))
         self.classifier.append(processor(KNeighborsClassifier(n_neighbors=15), "K Nearest Neighbors"))
@@ -42,25 +51,27 @@ class experiment:
         self.classifier.append(processor(MLPClassifier(), "Artificial neural networks"))
         self.classifier.append(processor(DecisionTreeClassifier(), "Decision Tree"))
 
+    # function to set up a list of normalizers(scalers)
     def buildprocessor(self):
         self.processor.append(processor(StandardScaler(), "Standard Scaler"))
         self.processor.append(processor(MinMaxScaler(), "MinMax Scaler"))
         self.processor.append(processor(MaxAbsScaler(), "MaxAbs Scaler"))
         self.processor.append(processor(Normalizer(), "Normalization"))
         self.processor.append(processor(Binarizer(), "Binarization"))
-        self.processor.append(processor(QuantileTransformer(), "Non-linear transformation"))
+        self.processor.append(processor(QuantileTransformer(), "Nonlinear transformation"))
 
+    # calculate precision of given classifier and dataset
     def getprecision(self, clf, x1, x2, y1, y2):
 
         clf.obj.fit(x1, y1)
         y_pred = clf.obj.predict(x2)
         mislabeled = (y2 != y_pred).sum()
         totaltest = x2.shape[0]
-        # print("Mislabeled points (%s Classification) out of a total %d points : %d" % (clf.descr, totaltest,mislabeled))
         Precision = 1 - mislabeled / totaltest
-        # print("Precision of %s is %4.2f%%" % (clf.descr, Precision * 100))
         return Precision
 
+    # calculate the precision and make the comparison table of the precisions with different classification and
+    # normalization(standardization) method
     def compare_clf_and_prep(self, x1_raw, x2_raw, y1_raw, y2_raw, x1, x2, y1, y2):
 
         result_matrix = []
@@ -85,18 +96,19 @@ class experiment:
         self.logfile.write("%0.8f%%, %s and %s classification" %(maxprec[0]*100, maxprec[1], maxprec[2]))
         self.logfile.write("\n")
 
-
+    # print the result of given matrix(the table of comparison of precisions)
     def printresult(self, matrix):
-        print("%28s%28s" %("___________________________", "No preprocess"), end='')
+        print("%26s%26s" %("_________________________", "No preprocess"), end='')
         for p in self.processor:
-            print("%28s" %p.descr, end='')
+            print("%26s" %p.descr, end='')
         print('')
         for i in range(len(self.classifier)):
-            print("%28s" % self.classifier[i].descr, end='')
+            print("%26s" % self.classifier[i].descr, end='')
             for j in range(len(self.processor)+1):
-                print("%22s%4.2f%%" % ("", matrix[i][j]*100), end='')
+                print("%20s%4.2f%%" % ("", matrix[i][j]*100), end='')
             print('')
 
+    # function to compare the performance of different dataset with same SVM classifier and non-linear normalizer
     def comparison(self, x1_raw, x2_raw, y1_raw, y2_raw, x1, x2, y1, y2, dx1, dx2, dy1, dy2):
         c = self.classifier[2]
         s = self.processor[5]

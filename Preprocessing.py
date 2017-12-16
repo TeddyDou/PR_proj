@@ -1,8 +1,11 @@
-'''
+"""
+This file is the class to preprocess the data, read raw data, select equalized size of 2 classes(default and
+non-default group of clients), combine the dimensions(features) that are highly correlated. Split data into 80%
+training and 20% of testing. Return both raw data and dimension-reduced data.
 Created on Nov 29, 2017
 
 @author: Zac
-'''
+"""
 import pandas as pd
 import numpy as np
 import random

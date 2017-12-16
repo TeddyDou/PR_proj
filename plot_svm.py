@@ -1,4 +1,6 @@
 """
+The file to plot the classification visualization result(six features will be shown in three 2-D figures with 2
+features each).
 Created on Nov.29, 2017
 
 @author Ted
@@ -13,46 +15,29 @@ from sklearn.preprocessing import QuantileTransformer
 
 
 class ploting:
+    """ploting class, it receive the classifier and scaler(normalizer) to be used in visualization"""
+
     def __init__(self, classifier, preprocessor):
         self.prep = preprocessor
         self.model = classifier
 
+    # Create a mesh of points to plot in
     def make_meshgrid(self, x, y, h=.02):
-
-        """Create a mesh of points to plot in
-
-        Parameters
-        ----------
-        x: data to base x-axis meshgrid on
-        y: data to base y-axis meshgrid on
-        h: stepsize for meshgrid, optional
-
-        Returns
-        -------
-        xx, yy : ndarray
-        """
         x_min, x_max = x.min() - 1, x.max() + 1
         y_min, y_max = y.min() - 1, y.max() + 1
         xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                              np.arange(y_min, y_max, h))
         return xx, yy
 
+    # Plot the decision boundaries for a classifier.
     def plot_contours(self, ax, clf, xx, yy, **params):
-        """Plot the decision boundaries for a classifier.
-
-        Parameters
-        ----------
-        ax: matplotlib axes object
-        clf: a classifier
-        xx: meshgrid ndarray
-        yy: meshgrid ndarray
-        params: dictionary of params to pass to contourf, optional
-        """
         Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
         Z = Z.reshape(xx.shape)
         out = ax.contourf(xx, yy, Z, **params)
         return out
 
+    # simplify the input data, sample the data with equal default and non-default record with given 2 attributes
+    # indices(one will be shown at x axis and the other will be at y axis)
     def data_simplification(self, x_read, y_read, sample, x_axi_attr_index, y_axi_attr_index):
         half_index = int(sample/2)
         simplified_x = np.empty([sample, 2], dtype=float)
@@ -71,6 +56,7 @@ class ploting:
 
         return simplified_x, simplified_y
 
+    # load dataset and return the sampled simplified data
     def load_data(self, sample, x_axi_attr_index, y_axi_attr_index):
         from Preprocessing import Preprocess
         from Postprocessing import Postprocess
@@ -82,6 +68,7 @@ class ploting:
         return self.data_simplification(x1, y1, sample,
                                         x_axi_attr_index, y_axi_attr_index)
 
+    # the function to plot the classification result
     def plot(self, sample_points, x_axi_attr_index, y_axi_attr_index, title, xlabel, ylabel):
         plot_x, plot_y = self.load_data(sample_points, x_axi_attr_index, y_axi_attr_index)
         X0, X1 = plot_x[:, 0], plot_x[:, 1]
@@ -104,10 +91,12 @@ class ploting:
 
 
 if __name__ == '__main__':
+    # set the classifier and non-linear normalizer
     c = svm.SVC()
     p = QuantileTransformer()
     myplot = ploting(c, p)
 
+    # each time sample 100 records with equal default clients and non-default clients and show 2 of the features
     # column 0: limited balance, 1: sex(gender) 2: education 3: marriage 4: age 5: missed payment 6: amount owed
     myplot.plot(100, 0, 1, "SVM Classifier", "x axis: limited balance", "y axis: gender")
     myplot.plot(100, 2, 6, "SVM Classifier", "x axis: education", "y axis: amount owed")
